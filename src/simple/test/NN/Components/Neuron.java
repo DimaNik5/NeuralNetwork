@@ -62,7 +62,6 @@ public class Neuron {
     }
 
     // Вычисленное значение (разница от идеала/суииа произведений) домнажается на производную от функции
-    // TODO определить нужно ли использовать обычный результат (result) или нормированный (normResult)
     public double setDelta(double delta){
         return (this.delta = delta * derSigmoid(normResult));
     }
@@ -88,7 +87,7 @@ public class Neuron {
             double wd = delta[i] * speed * result + alpha * lastModWeight[i];
             weight[i] += wd;
             if(weight[i] > max) max = weight[i];
-            if(weight[i] < 0.00001) weight[i] = 0;
+            if(Math.abs(weight[i]) < 0.00001) weight[i] = 0;
             lastModWeight[i] = wd;
         }
         return max;

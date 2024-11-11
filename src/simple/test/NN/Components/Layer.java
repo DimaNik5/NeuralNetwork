@@ -22,6 +22,26 @@ public class Layer {
         }
     }
 
+    public void print(int i, boolean last){
+        if(i < 0 || i > neurons.length) return;
+        if(i == neurons.length){
+            if(last) return;
+            if(b == null) return;
+            System.out.print("(");
+            for(int j = 0; j < b.getLenWeight(); j++){
+                System.out.print(String.format(" %.2f",b.getWeight(j)) + " ");
+            }
+            System.out.print(")");
+            return;
+        }
+        System.out.print(String.format(" %.2f",neurons[i].getNormResult()) + "(");
+        if(last) return;
+        for(int j = 0; j < neurons[i].getLenWeight(); j++){
+            System.out.print(String.format(" %.2f",neurons[i].getWeight(j)) + " ");
+        }
+        System.out.print(")");
+    }
+
     // Нормализация(активация)
     public void normalize(){
         for (Neuron neuron : neurons) {

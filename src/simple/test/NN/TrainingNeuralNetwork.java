@@ -35,7 +35,18 @@ public class TrainingNeuralNetwork {
                 else counting(test[0]); // Подсчет результата
                 // Корректировка весов
                 correction(test[1]);
+                //print();
             }
+        }
+    }
+
+    private void print(){
+        for(int i = 0; i < 4; i++){
+            for (int j = 0; j < layers.length; j++) {
+                layers[j].print(i, j == layers.length - 1);
+                System.out.print("  ");
+            }
+            System.out.println();
         }
     }
 
