@@ -22,26 +22,6 @@ public class Layer {
         }
     }
 
-    public void print(int i, boolean last){
-        if(i < 0 || i > neurons.length) return;
-        if(i == neurons.length){
-            if(last) return;
-            if(b == null) return;
-            System.out.print("(");
-            for(int j = 0; j < b.getLenWeight(); j++){
-                System.out.print(String.format(" %.2f",b.getWeight(j)) + " ");
-            }
-            System.out.print(")");
-            return;
-        }
-        System.out.print(String.format(" %.2f",neurons[i].getNormResult()) + "(");
-        if(last) return;
-        for(int j = 0; j < neurons[i].getLenWeight(); j++){
-            System.out.print(String.format(" %.2f",neurons[i].getWeight(j)) + " ");
-        }
-        System.out.print(")");
-    }
-
     // Нормализация(активация)
     public void normalize(){
         for (Neuron neuron : neurons) {
@@ -93,48 +73,6 @@ public class Layer {
         return neurons.length;
     }
 
-    // Расчет и получение списка дельт
-    public double[] setDelta(double[] ideal, boolean last){
-        double[] res = new double[neurons.length];
-        for(int i = 0; i < neurons.length; i++){
-            // Выходной слой
-            if(last){
-                // Разница между идеалом
-                res[i] = neurons[i].setDelta(ideal[i] - neurons[i].getNormResult());
-            }
-            else{
-                // Сумма произведений весов на соот. дельты следующего слоя
-                double sum = 0;
-                for(int j = 0; j < ideal.length; j++){
-                    sum += neurons[i].getWeight(j) * ideal[j];
-                }
-                res[i] = neurons[i].setDelta(sum);
-            }
-        }
-        return res;
-    }
-
-    // Установка новых весов
-    public double setDeltaWeight(double[] delta, double speed, double alpha){
-        double max = 0, t;
-        for(Neuron neuron : neurons){
-            t = neuron.setDeltaWeight(delta, speed, alpha);
-            if(t > max) max = t;
-        }
-        t = b.setDeltaWeight(delta, speed, alpha);
-        if(t > max) max = t;
-        return max; // максимальный новый вес
-    }
-
-    // Получение списка дельт
-    public double[] getDeltas(){
-        double[] res = new double[neurons.length];
-        for(int i = 0; i < neurons.length; i++){
-            res[i] = neurons[i].getDelta();
-        }
-        return res;
-    }
-
     // Установка результатов нейронов в 0
     public void setZero(){
         for (Neuron neuron : neurons){
@@ -142,10 +80,4 @@ public class Layer {
         }
     }
 
-    // Пропорциональной деление весов нейронов
-    public void divWeight(double div){
-        for(Neuron neuron : neurons){
-            neuron.divWeight(div);
-        }
-    }
 }
