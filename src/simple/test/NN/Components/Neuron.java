@@ -52,4 +52,8 @@ public class Neuron {
         return weight.length;
     }
 
+    public void setWeight(double w, int i){
+        weight[i] = w;
+    }
+
 }

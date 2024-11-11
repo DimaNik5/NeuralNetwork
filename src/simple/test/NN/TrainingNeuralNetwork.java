@@ -49,17 +49,15 @@ public class TrainingNeuralNetwork {
                 throw new RuntimeException(e);
             }
 
-            for (int i = 0; i < layerTrains.length; i++) {
+            for (LayerTrain layerTrain : layerTrains) {
                 line = br.readLine();
                 if (line == null) return;
                 String[] w = line.split(";");
-                for (int j = 0; j < layerTrains[i].getLength(); j++) {
-                    layerTrains[i].setWeight(w[j].split(" "), j);
+                for (int j = 0; j < layerTrain.getLength(); j++) {
+                    if (!layerTrain.setWeight(w[j].split(" "), j)) return;
                 }
-                layerTrains[i].setWeightB(w[layerTrains[i].getLength()].split(" "));
+                if (!layerTrain.setWeightB(w[layerTrain.getLength()].split(" "))) return;
             }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -85,6 +83,7 @@ public class TrainingNeuralNetwork {
         }
     }
 
+    // Вывод в консоль результатов нейронов и весов
     private void print(){
         for(int i = 0; i < 4; i++){
             for (int j = 0; j < layerTrains.length; j++) {
@@ -180,5 +179,10 @@ public class TrainingNeuralNetwork {
         catch (Exception e) {
             e.getStackTrace();
         }
+    }
+
+    public void save(){
+        if(fileName.isEmpty()) return;
+        save(fileName);
     }
 }

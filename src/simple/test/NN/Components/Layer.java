@@ -80,4 +80,29 @@ public class Layer {
         }
     }
 
+    // Установка весов для заданного нейрона
+    public boolean setWeight(String[] weights, int i){
+        if(i < 0 || i >= neurons.length) return false;
+        try{
+            for(int j = 0; j < weights.length; j++){
+                neurons[i].setWeight(Double.parseDouble(weights[j]), j);
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
+    // Установка весов для нейрона смещения
+    public boolean setWeightB(String[] weights){
+        try{
+            for(int j = 0; j < weights.length; j++){
+                b.setWeight(Double.parseDouble(weights[j]), j);
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
+
 }

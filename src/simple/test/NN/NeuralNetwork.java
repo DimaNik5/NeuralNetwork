@@ -1,19 +1,60 @@
 package simple.test.NN;
 
 import simple.test.NN.Components.Layer;
+import simple.test.NN.Components.LayerTrain;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class NeuralNetwork {
-    private final Layer[] layers;
+    private Layer[] layers;
 
-    public NeuralNetwork(TrainingNeuralNetwork tnn, String fileName){
-        tnn.save(fileName);
+    // Копирующий конструктор из обучающей нейросети, сохраняющий веса в указанном файле
+    public NeuralNetwork(TrainingNeuralNetwork tnn, String fileNameForSave){
+        tnn.save(fileNameForSave);
         layers = tnn.getLayers();
     }
 
+    // Конструктор, получающий слои
     public NeuralNetwork(Layer[] layers){
         this.layers = layers;
     }
 
+    // Конструктор, загружающий из переданного файла веса
+    public NeuralNetwork(String fileName){
+        try {
+            FileReader fr = new FileReader(fileName);
+            BufferedReader br = new BufferedReader(fr);
+
+            String line = br.readLine();
+            if (line == null) return;
+            String[] str = line.split(" ");
+            try {
+                layers = new Layer[Integer.parseInt(str[0])];
+                for (int i = 0; i < layers.length; i++) {
+                    if (Integer.parseInt(str[i + 1]) < 0) return;
+                    layers[i] = new LayerTrain(Integer.parseInt(str[i + 1]), (i < layers.length - 1 ? Integer.parseInt(str[i + 2]) : 0));
+                }
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
+
+            for (Layer layer : layers) {
+                line = br.readLine();
+                if (line == null) return;
+                String[] w = line.split(";");
+                for (int j = 0; j < layer.getLength(); j++) {
+                    if (!layer.setWeight(w[j].split(" "), j)) return;
+                }
+                if (!layer.setWeightB(w[layer.getLength()].split(" "))) return;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Подсчет результата по переданным входным парамметрам
     public double[] counting(double[] input){
         // Установка входных значений
         layers[0].setInput(input);
@@ -38,7 +79,8 @@ public class NeuralNetwork {
         return layers[layers.length - 1].getNormResult();
     }
 
-    public double[][] countingList(double[][] input){
+    // Подсчет результатов по списку переданных входных парамметров
+    public double[][] counting(double[][] input){
         double[][] res = new double[input.length][];
         for(int i = 0; i < input.length; i++){
             res[i] = counting(input[i]);
@@ -46,6 +88,7 @@ public class NeuralNetwork {
         return res;
     }
 
+    // Возврат слоев
     public Layer[] getLayers() {
         return layers;
     }
