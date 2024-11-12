@@ -58,29 +58,37 @@ public class TrainingNeuralNetwork {
                 }
                 if (!layerTrain.setWeightB(w[layerTrain.getLength()].split(" "))) return;
             }
+
+            br.close();
+            fr.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public void train(DataSet dataSet, int epochs){
+    public double train(DataSet dataSet, int epochs){
         double[][][] tests = dataSet.getTests();
+        double maxDelta = 0;
         // Тренировка по эпохам
         for (int k = 0; k < epochs; k++){
             // Вывод результатов 1 и последней эпохи
-            if(k == 0 || k == epochs - 1)
-                System.out.println("\tEpoch " + k);
+            /*if(k == 0 || k == epochs - 1)
+                System.out.println("\tEpoch " + k);*/
             // Проход по тестам
             for (double[][] test : tests) {
-                if (k == 0 || k == epochs - 1)
+                /*if (k == 0 || k == epochs - 1)
                     System.out.println("Result: " + String.format(" %.2f", counting(test[0])[0]) + " Ideal : " + test[1][0]);
-                else counting(test[0]); // Подсчет результата
+                else counting(test[0]); // Подсчет результата*/
+                if (k == epochs - 1) maxDelta = Math.max(Math.abs(test[1][0] - counting(test[0])[0]), maxDelta);
+                else counting(test[0]);
                 // Корректировка весов
                 correction(test[1]);
                 //print();
             }
         }
+        return maxDelta;
+
     }
 
     // Вывод в консоль результатов нейронов и весов
@@ -182,7 +190,7 @@ public class TrainingNeuralNetwork {
     }
 
     public void save(){
-        if(fileName.isEmpty()) return;
+        if(fileName == null || fileName.isEmpty()) return;
         save(fileName);
     }
 }

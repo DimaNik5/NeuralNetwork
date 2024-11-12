@@ -49,6 +49,9 @@ public class NeuralNetwork {
                 }
                 if (!layer.setWeightB(w[layer.getLength()].split(" "))) return;
             }
+
+            br.close();
+            fr.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
