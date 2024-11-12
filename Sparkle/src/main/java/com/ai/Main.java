@@ -7,15 +7,18 @@ import static com.ai.Training.train;
 
 public class Main {
     public static void main(String[] args) {
+        // true - при открытии через IDE, false - при открытии через исполняемый файл
+        String way = System.getProperty("user.dir") + ((true) ? "/src/main/java/com/ai" : "");
 
-        DataSet ds = new DataSet("C:/Users/Президент/Desktop/Sparkle/src/main/java/com/ai/dataSet/my.csv");
+        String dataset = way + "/dataset.csv";
+        DataSet ds = new DataSet(dataset);
         ds.loadFromCsv();
 
+        String weight = way + "/weight.csv";
         // new int[]{7, 16, 16, 16, 1} - структура
-        TrainingNeuralNetwork tnn = new TrainingNeuralNetwork("C:\\Users\\Президент\\Desktop\\Sparkle\\src\\main\\java\\com\\ai\\neuralNetwork/weight.csv",0.005, 0.8, 10);
+        TrainingNeuralNetwork tnn = new TrainingNeuralNetwork(weight,0.005, 0.8, 10);
         //tnn.train(ds.getInList(), ds.getOutList(), 1000);
-        //tnn.save("C:\\Users\\Президент\\Desktop\\Sparkle\\src\\main\\java\\com\\ai\\neuralNetwork/weight.csv");
-
+        //tnn.save(weight);
 
         train(tnn, ds);
     }
