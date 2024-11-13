@@ -10,11 +10,18 @@ public class CSVReader {
     
     public ArrayList<Data> readCsv(String fileName){
         ArrayList<Data> resultList = new ArrayList<>();
+        //int s = 0, end = 500;
+        //int c = 0;
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String dataLine = br.readLine();
             double[] doubleData = new double[8];
             while ((dataLine = br.readLine()) != null){
+                /*if(c < s){
+                    c++;
+                    continue;
+                }
+                if(c == end) return resultList;*/
                 boolean status = false;
                 String[] splitLine = dataLine.split(",");
                 for (int i = 1; i < splitLine.length; i++){
@@ -26,6 +33,7 @@ public class CSVReader {
                 }
                 //System.out.println(Arrays.toString(doubleData) + " " + status);
                 if (status) continue;
+                //c++;
                 resultList.add(new Data(doubleData));
             }
             return resultList;

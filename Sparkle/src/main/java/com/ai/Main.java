@@ -1,13 +1,16 @@
 package com.ai;
 
 import com.ai.dataSet.DataSet;
+import com.ai.neuralNetwork.NeuralNetwork;
 import com.ai.neuralNetwork.train.TrainingNeuralNetwork;
+
+import java.util.Arrays;
 
 import static com.ai.Training.train;
 
 public class Main {
 
-    static boolean newNetwork = true;
+    static boolean newNetwork = false;
     // true - при открытии через IDE, false - при открытии через исполняемый файл
     static boolean InIDE = true;
     public static void main(String[] args) {
@@ -18,15 +21,18 @@ public class Main {
         DataSet ds = new DataSet(dataset);
         ds.loadFromCsv();
 
-        String weight = way + "/weight5.csv";
+        String weight = way + "/weight.csv";
 
-        TrainingNeuralNetwork tnn;
+        /* TrainingNeuralNetwork tnn;
         if(newNetwork){
-            tnn = new TrainingNeuralNetwork(new int[]{7, 8, 8, 8, 8, 8, 1},0.005, 0.8, 10);
+            tnn = new TrainingNeuralNetwork(new int[]{7, 16, 15, 14, 13, 12, 11, 10, 1},0.005, 0.8, 10);
             tnn.save(weight);
         }
         else tnn = new TrainingNeuralNetwork(weight,0.005,  0.8, 10);
 
-        train(tnn, ds);
+        train(tnn, ds);*/
+
+        for(int i = 0; i < 20; i++)
+            System.out.println(Arrays.toString((new NeuralNetwork(weight)).counting(ds.getInList()[i])) + " ideal: " + ds.getOutList()[i][0]);
     }
 }

@@ -74,8 +74,13 @@ public class TrainingNeuralNetwork {
             // Проход по тестам
             for (int i = 0; i < in.length; i++) {
                 // Подсчет результата
+                double t = Math.abs(out[i][0] - counting(in[i])[0]);
+                /*if(t > 0.3) {
+                    correction(out[i]);
+                    counting(in[i]);
+                }*/
                 if (k == epochs - 1) {
-                    double t = Math.abs(out[i][0] - counting(in[i])[0]);
+
                     middle += t;
                     maxDelta = Math.max(t, maxDelta);
                 }
