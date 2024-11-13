@@ -5,13 +5,14 @@ import com.ai.neuralNetwork.train.TrainingNeuralNetwork;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 public class Training {
 
     public static double train(TrainingNeuralNetwork tnn, DataSet dataSet) {
         InputStream input = System.in; // Получаем входной поток
         int i = 1;
-        int epochs = 1000000;
+        int epochs = 100;
         boolean show = true;
         while(true) {
 
@@ -26,7 +27,7 @@ public class Training {
                     else if(inputString.equals("e\n")) break;
                 }
 
-                if(show) System.out.println("Maximum deviation per " + i + "kk epoch: " + tnn.train(dataSet.getInList(), dataSet.getOutList(), epochs));
+                if(show) System.out.println("Maximum deviation per " + i + "00 epoch: " + Arrays.toString(tnn.train(dataSet.getInList(), dataSet.getOutList(), epochs)));
                 else tnn.train(dataSet.getInList(), dataSet.getOutList(), epochs);
                 i++;
 

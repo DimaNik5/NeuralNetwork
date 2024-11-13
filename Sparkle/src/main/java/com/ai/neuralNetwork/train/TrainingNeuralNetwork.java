@@ -67,20 +67,25 @@ public class TrainingNeuralNetwork {
 
     }
 
-    public double train(double[][] in, double[][] out, int epochs){
-        double maxDelta = 0;
+    public double[] train(double[][] in, double[][] out, int epochs){
+        double maxDelta = 0, middle = 0;
         // Тренировка по эпохам
         for (int k = 0; k < epochs; k++){
             // Проход по тестам
             for (int i = 0; i < in.length; i++) {
                 // Подсчет результата
-                if (k == epochs - 1) maxDelta = Math.max(Math.abs(out[i][0] - counting(in[i])[0]), maxDelta);
+                if (k == epochs - 1) {
+                    double t = Math.abs(out[i][0] - counting(in[i])[0]);
+                    middle += t;
+                    maxDelta = Math.max(t, maxDelta);
+                }
                 else counting(in[i]);
                 // Корректировка весов
                 correction(out[i]);
             }
         }
-        return maxDelta;
+        middle /= in.length;
+        return new double[]{maxDelta, middle};
 
     }
 
@@ -144,6 +149,7 @@ public class TrainingNeuralNetwork {
     }
 
     public void save(String file){
+        fileName = file;
         try {
             FileWriter fw = new FileWriter(file);
 
