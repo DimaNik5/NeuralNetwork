@@ -12,7 +12,7 @@ public class Training {
     public static double train(TrainingNeuralNetwork tnn, DataSet dataSet) {
         InputStream input = System.in; // Получаем входной поток
         int i = 1;
-        int epochs = 10;
+        int epochs = 100;
         boolean show = true;
         while(true) {
 
