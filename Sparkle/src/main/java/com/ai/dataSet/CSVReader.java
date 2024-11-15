@@ -24,7 +24,9 @@ public class CSVReader {
                 if(c == end) return resultList;*/
                 boolean status = false;
                 String[] splitLine = dataLine.split(",");
-                for (int i = 1; i < splitLine.length; i++){
+                int len = splitLine.length;
+                if(len != 9) continue;
+                for (int i = 1; i < len; i++){
                     double normResult = NormalizeData.normalize(splitLine[i], i);
                     if (normResult == -1) {
                         status = true; break;

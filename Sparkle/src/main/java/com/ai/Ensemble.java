@@ -11,7 +11,7 @@ public class Ensemble {
         neuralNetworks = new NeuralNetwork[COUNT];
         String weight;
         for(int i = 0; i < COUNT; i++){
-            weight = way + "/weight" + i + ".csv";
+            weight = way + "/weight/weight" + i + ".csv";
             neuralNetworks[i] = new NeuralNetwork(weight);
         }
     }
@@ -28,7 +28,9 @@ public class Ensemble {
         double[] doubleData = new double[7];
         boolean status = false;
         String[] splitLine = in.split(",");
-        for (int i = 1; i < splitLine.length; i++){
+        int len = splitLine.length;
+        if(len != 9) return -1;
+        for (int i = 1; i < len; i++){
             double normResult = NormalizeData.normalize(splitLine[i], i);
             if (normResult == -1) {
                 status = true; break;
