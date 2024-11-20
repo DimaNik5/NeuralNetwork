@@ -24,12 +24,12 @@ public class Ensemble {
         return res / COUNT;
     }
 
-    public double counting(String in){
+    public double counting(String in, int count){
         double[] doubleData = new double[7];
         boolean status = false;
         String[] splitLine = in.split(",");
         int len = splitLine.length;
-        if(len != 9) return -1;
+        if(len != count) return -1;
         for (int i = 1; i < len; i++){
             double normResult = NormalizeData.normalize(splitLine[i], i);
             if (normResult == -1) {

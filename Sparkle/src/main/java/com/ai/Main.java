@@ -1,16 +1,22 @@
 package com.ai;
 
+import com.ai.dataSet.Data;
 import com.ai.dataSet.DataSet;
+import com.ai.dataSet.NormalizeData;
 import com.ai.neuralNetwork.NeuralNetwork;
 import com.ai.neuralNetwork.train.TrainingNeuralNetwork;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static com.ai.Training.train;
 
 public class Main {
 
+    static boolean res = true;
     static boolean testIn = true;
     static boolean newNetwork = true;
     // true - при открытии через IDE, false - при открытии через исполняемый файл
@@ -19,7 +25,21 @@ public class Main {
         // true - при открытии через IDE, false - при открытии через исполняемый файл
         String way = System.getProperty("user.dir") + ((InIDE) ? "/src/main/java/com/ai" : "");
 
-        if(!testIn) {
+        if(res){
+            try {
+                Ensemble ensemble = new Ensemble(way);
+                BufferedReader br = new BufferedReader(new FileReader(way  + "/test.csv"));
+                String dataLine = br.readLine();
+                double[] doubleData = new double[7];
+                while ((dataLine = br.readLine()) != null){
+                    double res = ensemble.counting(dataLine, 8);
+                    if(res != -1) System.out.println(dataLine + " " + res);
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        else if(!testIn) {
             String dataset = way + "/train.csv";
             DataSet ds = new DataSet(dataset);
             ds.loadFromCsv();
@@ -60,12 +80,6 @@ public class Main {
 
             System.out.println(max);
             System.out.println(sr / ds.getOutList().length);
-
-           /* String s = "fffe33003100330031003100,2008-01-24,Female,Service,No,4.0,8.0,7.8";
-            System.out.println(ensemble.counting(s) + " Ideal: 0.74");
-            s = "fffe32003600340039003400,2008-02-28,Female,Service,No,4.0,8.0,9.0";
-            System.out.println(ensemble.counting(s) + " Ideal: 0.74");*/
-
         }
 
     }
