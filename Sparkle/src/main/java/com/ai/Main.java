@@ -25,12 +25,11 @@ public class Main {
         // true - при открытии через IDE, false - при открытии через исполняемый файл
         String way = System.getProperty("user.dir") + ((InIDE) ? "/src/main/java/com/ai" : "");
 
-        if(res){
+        if(res){ // Вывод подсчитанных результатов тествого датасета
             try {
                 Ensemble ensemble = new Ensemble(way);
                 BufferedReader br = new BufferedReader(new FileReader(way  + "/test.csv"));
                 String dataLine = br.readLine();
-                double[] doubleData = new double[7];
                 while ((dataLine = br.readLine()) != null){
                     double res = ensemble.counting(dataLine, 8);
                     if(res != -1) System.out.println(dataLine + " " + res);
@@ -39,7 +38,7 @@ public class Main {
                 System.out.println(e);
             }
         }
-        else if(!testIn) {
+        else if(!testIn) { // Обучение/создание перцептрона
             String dataset = way + "/train.csv";
             DataSet ds = new DataSet(dataset);
             ds.loadFromCsv();
@@ -54,7 +53,7 @@ public class Main {
 
             train(tnn, ds);
         }
-        else{
+        else{ // Проверка ансамбля на обучающем датасете
             Ensemble ensemble = new Ensemble(way);
 
             String dataset = way + "/train.csv";
@@ -64,8 +63,7 @@ public class Main {
             double max = 0;
             double sr = 0;
             System.out.println(ds.getOutList().length);
-            try {
-                FileWriter fw = new FileWriter(way + "/res.csv");
+            try(FileWriter fw = new FileWriter(way + "/res.csv")) {
 
                 for(int i = 0; i < ds.getOutList().length; i++){
                     double t = Math.abs(ensemble.counting(ds.getInList()[i]) - ds.getOutList()[i][0]);
@@ -73,13 +71,12 @@ public class Main {
                     sr += t;
                     fw.write(ds.getOutList()[i][0] + " " + ensemble.counting(ds.getInList()[i]) + "\n");
                 }
-                fw.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
 
-            System.out.println(max);
-            System.out.println(sr / ds.getOutList().length);
+            System.out.println(max); // Максимальная разница
+            System.out.println(sr / ds.getOutList().length); // Средняя разница
         }
 
     }

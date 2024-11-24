@@ -22,9 +22,7 @@ public class NeuralNetwork {
 
     // Конструктор, загружающий из переданного файла веса
     public NeuralNetwork(String fileName){
-        try {
-            FileReader fr = new FileReader(fileName);
-            BufferedReader br = new BufferedReader(fr);
+        try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
 
             String line = br.readLine();
             if (line == null) return;
@@ -48,9 +46,6 @@ public class NeuralNetwork {
                 }
                 if (!layer.setWeightB(w[layer.getLength()].split(" "))) return;
             }
-
-            br.close();
-            fr.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

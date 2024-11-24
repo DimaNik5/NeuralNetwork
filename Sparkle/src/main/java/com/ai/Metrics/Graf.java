@@ -42,8 +42,9 @@ public class Graf extends JPanel {
         drp.drawLine(20, 520, 20, 20);
         drp.drawLine(20, 520, 520, 520);
         drp.drawLine(20, 520, 520, 20);
+        drp.setColor(new Color(0, 0, 0, 20));
         for(int[] p : resultList){
-            drp.drawLine(p[0],p[1],p[0],p[1]);
+            drp.drawLine(p[0],p[1],p[0] + 1,p[1]);
         }
     }
 }
