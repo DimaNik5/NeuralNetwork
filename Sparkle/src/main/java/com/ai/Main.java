@@ -26,13 +26,12 @@ public class Main {
         String way = System.getProperty("user.dir") + ((InIDE) ? "/src/main/java/com/ai" : "");
 
         if(res){ // Вывод подсчитанных результатов тествого датасета
-            try {
-                Ensemble ensemble = new Ensemble(way);
-                BufferedReader br = new BufferedReader(new FileReader(way  + "/test.csv"));
+            try(BufferedReader br = new BufferedReader(new FileReader(way  + "/test.csv"))) {
+                Ensemble ensemble = new Ensemble(way + "/weight/");
                 String dataLine = br.readLine();
                 while ((dataLine = br.readLine()) != null){
-                    double res = ensemble.counting(dataLine, 8);
-                    if(res != -1) System.out.println(dataLine + " " + res);
+                    ensemble.description(dataLine);
+
                 }
             } catch (Exception e) {
                 System.out.println(e);
@@ -79,5 +78,53 @@ public class Main {
             System.out.println(sr / ds.getOutList().length); // Средняя разница
         }
 
+    }
+
+    public static String resData(String line, int i){
+        switch(i)
+        {
+            case 1: // Дата прихода
+                try {
+                    double res = (Double.parseDouble("" + line.charAt(5) + line.charAt(6)) - 1) / (12 - 1);
+                    return (res > 0.6 ? "More 6 month" : "");
+                } catch (Exception e) {
+                    return "";
+                }
+            case 2: // Пол
+                /*if ("Male".equals(line)) return 1;
+                if ("Female".equals(line)) return 0;*/
+                return "";
+            case 3: // Тип работы
+                /*if ("Service".equals(line)) return line;
+                if ("Product".equals(line)) return 0;*/
+                return line;
+            case 4: // Удаленка
+                if ("Yes".equals(line)) return "";
+                if ("No".equals(line)) return "Have not ydalenka";
+                return "";
+            case 5: // Нагрузка (0 - 5)
+                try {
+                    double temp = Double.parseDouble(line) / 5;
+                    return (temp < 0 || temp > 1) ? "" : (temp > 0.65 ? "Big load" : "");
+                } catch (Exception e) {
+                    return "";
+                }
+            case 6: // Рабочее время (1 - 10)
+                try {
+                    double temp = (Double.parseDouble(line) - 1) / (10 - 1);
+                    return (temp < 0 || temp > 1) ? "" : (temp > 0.65 ? "Long work time" : "");
+                } catch (Exception e) {
+                    return "";
+                }
+            case 7: // Уровень психического переутомления (0 - 10)
+                try {
+                    double temp = Double.parseDouble(line) / 10;
+                    return (temp < 0 || temp > 1) ? "" : (temp > 0.65 ? "pcix" : "");
+                } catch (Exception e) {
+                    return "";
+                }
+            default:
+                return "";
+        }
     }
 }

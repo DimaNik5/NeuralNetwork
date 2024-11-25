@@ -46,4 +46,37 @@ public class Ensemble {
 
         return counting(doubleData);
     }
+
+    // Подсчет результата по вводимой строчке и количеству параметров по умолчанию(8)
+    public double counting(String in){
+        return  counting(in, 8);
+    }
+
+    // Подсчет и вывод описаний причин выгорания
+    public void description(String in){
+        double[] doubleData = new double[7];
+        boolean status = false;
+        String[] splitLine = in.split(",");
+        int len = splitLine.length;
+        if(len != 8) return;
+        for (int i = 1; i < len; i++){
+            double normResult = NormalizeData.normalize(splitLine[i], i);
+            if (normResult == -1) {
+                status = true; break;
+            }
+            doubleData[i - 1] = normResult;
+        }
+        if(status) return;
+        double res = counting(doubleData);
+        System.out.print("Employee " + splitLine[0] + ".\nDegree of burnout " + res + ".\nProbable causes: ");
+        boolean f = false;
+        for(int i = 1; i < len; i++){
+            String s = NormalizeData.descriptionOfData(splitLine[i], i);
+            if(!s.isEmpty()){
+                System.out.print((f ? ", " : "") + s);
+                f = true;
+            }
+        }
+        System.out.println((f ? "." : "no problem causes."));
+    }
 }
